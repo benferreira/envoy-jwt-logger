@@ -9,7 +9,7 @@ build-image: build
 
 .PHONY: run
 run:
-	envoy -c envoy.yaml --concurrency 1 --log-format '%v'
+	envoy -c ./_envoy_config/envoy.yaml --concurrency 1 --log-format '%v'
 
 .PHONY: test-integration
 test-integration:

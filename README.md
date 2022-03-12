@@ -24,4 +24,4 @@ make run
 
 ## Istio deployment
 
-This includes a sample Istio deployment in `istio/httpbin.yaml` that injects the WASM plugin in an `httpbin` app in the `default` namespace.
+This includes a sample Istio deployment in `_istio/httpbin.yaml` that injects the WASM plugin in an `httpbin` app in the `default` namespace.
