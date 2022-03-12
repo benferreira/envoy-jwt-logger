@@ -1,0 +1,4 @@
+github.com/tetratelabs/proxy-wasm-go-sdk v0.16.0 h1:6xhDLV4DD2+q3Rs4CDh7cqo69rQ50XgCusv/58D44o4=
+github.com/tetratelabs/proxy-wasm-go-sdk v0.16.0/go.mod h1:8CxNZJ+9yDEvNnAog384fC8j1tKNF0tTZevGjOuY9ds=
+github.com/valyala/fastjson v1.6.3 h1:tAKFnnwmeMGPbwJ7IwxcTPCNr3uIzoIj3/Fh90ra4xc=
+github.com/valyala/fastjson v1.6.3/go.mod h1:CLCAqky6SMuOcxStkYQvblddUtoRxhYMGLrsQns1aXY=
