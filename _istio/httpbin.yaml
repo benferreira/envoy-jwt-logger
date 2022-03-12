@@ -82,23 +82,6 @@ spec:
 
 ---
 
-apiVersion: telemetry.istio.io/v1alpha1
-kind: Telemetry
-metadata:
-  name: httpbin
-  namespace: default
-spec:
-  accessLogging:
-  - providers:
-    - name: envoy
-    filter:
-      expression: response.code == 401 || response.code == 403
-  selector:
-    matchLabels:
-      app: httpbin
-
----
-
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
