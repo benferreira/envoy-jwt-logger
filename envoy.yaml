@@ -32,7 +32,13 @@ static_resources:
                         config:
                           configuration:
                             "@type": type.googleapis.com/google.protobuf.StringValue
-                            value: sub aud
+                            value: |
+                              {
+                                "claims": [
+                                  "sub",
+                                  "aud"
+                                ]
+                              }
                           vm_config:
                             runtime: "envoy.wasm.runtime.v8"
                             code:

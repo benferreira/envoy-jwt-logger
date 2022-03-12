@@ -1,0 +1,1 @@
+curl http://192.168.0.105/httpbin/headers --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhdWQiOiJzb21lYXVkaWVuY2UifQ.IaAz5CuyzFcDHbTOKWNzDgHd4xkmn-jgfmMn6IUGUFQ'

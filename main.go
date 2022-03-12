@@ -26,18 +26,47 @@ type pluginContext struct {
 	claimsToLog []string
 }
 
+// OnPluginStart sets the plugin context with the claims it is expected to log
 func (ctx *pluginContext) OnPluginStart(pluginConfigurationSize int) types.OnPluginStartStatus {
 	data, err := proxywasm.GetPluginConfiguration()
 	if err != nil {
 		proxywasm.LogCriticalf("error reading plugin configuration: %v", err)
+		return types.OnPluginStartStatusFailed
 	}
-	ctx.claimsToLog = strings.Split(string(data), " ")
 
-	if len(ctx.claimsToLog) == 0 || ctx.claimsToLog[0] == "" {
-		proxywasm.LogCritical("no claims to log, check config.configuration.value")
+	claims, err := parseConfigClaims(string(data))
+
+	if err != nil {
+		proxywasm.LogCriticalf("failed to parse plugin configuration: %v", err)
+		return types.OnPluginStartStatusFailed
 	}
+
+	if len(claims) == 0 || claims[0] == "" {
+		proxywasm.LogCritical("no claims to log, check config.configuration.value")
+		return types.OnPluginStartStatusFailed
+	}
+
+	ctx.claimsToLog = claims
+	proxywasm.LogInfof("jwt claim logging for claims: %v", ctx.claimsToLog)
 
 	return types.OnPluginStartStatusOK
+}
+
+func parseConfigClaims(data string) ([]string, error) {
+	parsedJson, err := fastjson.Parse(string(data))
+
+	if err != nil {
+		return nil, err
+	}
+
+	v := parsedJson.GetArray("claims")
+	claims := make([]string, 0)
+
+	for _, claim := range v {
+		claims = append(claims, string(claim.GetStringBytes()))
+	}
+
+	return claims, nil
 }
 
 type httpHeaders struct {
@@ -50,13 +79,15 @@ func (ctx *pluginContext) NewHttpContext(contextID uint32) types.HttpContext {
 	return &httpHeaders{contextID: contextID, claimsToLog: &ctx.claimsToLog}
 }
 
+// OnHttpRequestHeaders iterates over http request headers looking for the authorization header.
+// If an authorization header is found and it contains a JWT, the JWT is decoded and the claims are logged
 func (ctx *httpHeaders) OnHttpRequestHeaders(numHeaders int, endOfStream bool) types.Action {
 	headers, err := proxywasm.GetHttpRequestHeaders()
 	if err != nil {
 		proxywasm.LogCriticalf("failed to get request headers: %v", err)
 	}
 
-	//Locate the authorization header and log it, if present
+	//Locate the authorization header and log jwt claims, if present
 	for _, header := range headers {
 		if header[0] == "authorization" {
 			logJWTClaims(header[1], *ctx.claimsToLog)
