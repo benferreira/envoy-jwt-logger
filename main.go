@@ -85,6 +85,7 @@ func (ctx *httpHeaders) OnHttpRequestHeaders(numHeaders int, endOfStream bool) t
 	headers, err := proxywasm.GetHttpRequestHeaders()
 	if err != nil {
 		proxywasm.LogCriticalf("failed to get request headers: %v", err)
+		return types.ActionContinue
 	}
 
 	//Locate the authorization header and log jwt claims, if present
